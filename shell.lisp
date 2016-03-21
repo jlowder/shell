@@ -11,7 +11,7 @@
            :_
            :if_
            :when_
-           :cond_)
+           :cond_))
 
 (in-package :shell)
 
@@ -30,9 +30,8 @@ if the command was successful."
                   for ,line in (split #\newline ,a)
                   for x = nil then y
                   as y = (cons ,@body x)
-                  finally (return y))
+                  finally (return (nreverse y)))
                (eq ,c 0)))))
-
 ;; example:
 ;; (collect-shell ("who" line)
 ;;   (split "\\s+" line))
@@ -78,7 +77,7 @@ a bool indicating whether or not the command was successful."
       (uiop:run-program (list "/bin/sh" "-c" cmd)
                         :output :string
                         :ignore-error-status t)
-    (declare (ignorable b))
+    (declare (ignore b))
     (values (string-trim (string #\newline) a) (eq 0 c))))
              
 ;; example:  
@@ -95,7 +94,7 @@ and a bool indicating whether or not the command was successful."
       (uiop:run-program (list "/bin/sh" "-c" cmd)
                         :output :string
                         :ignore-error-status t)
-    (declare (ignorable b))
+    (declare (ignore b))
     (values (split #\newline a) (eq 0 c))))
 
 ;; example:
@@ -108,29 +107,30 @@ and a bool indicating whether or not the command was successful."
 ;; here are a couple of anaphoric macros to ease the handling of multiple value returns
 ;; (ref. On Lisp, Chapter 14)
 (defmacro if_ (if then &optional else)
-  (let ((res (gensym)))
-    `(multiple-value-bind (_ ,res) ,if
-       (if (or ,res _) ,then ,else))))
+  (let ((l (gensym)))
+    `(let ((,l (multiple-value-list ,if)))
+       (if (eq 2 (length ,l))
+           (if (not (null (cadr ,l)))
+               (let ((_ (car ,l)))
+                 (declare (ignorable _))
+                 ,then)
+               ,else)
+           (let ((_ (car ,l)))
+             (if (not (null _))
+                 ,then
+                 ,else))))))
 
 (defmacro when_ (if then)
-  (let ((res (gensym)))
-    `(multiple-value-bind (_ ,res) ,if
-       (when (or ,res _) ,then))))
+  `(if_ ,if ,then nil))
 
 (defmacro cond_ (&rest clauses)
   (when clauses
-    (let ((cl1 (car clauses))
-          (l (gensym)))
-      `(let ((,l (multiple-value-list ,(car cl1))))
-         (if (eq 2 (length ,l))
-             (if (cadr ,l)
-                 (let ((_ (car ,l)))
-                   ,@(cdr cl1))
-                 (cond_ ,@(cdr clauses)))
-             (if_ (car ,l)
-                  ,@(cdr cl1)
-                  (cond_ ,@(cdr clauses))))))))
+    (let ((cl1 (car clauses)))
+      `(if_ ,(car cl1)
+            ,@(cdr cl1)
+            (cond_ ,@(cdr clauses))))))
 
+;;
 ;; example:
 ;; (when_ (collect-shell ("who" line)
 ;;                     (split "\\s+" line))

@@ -25,7 +25,6 @@ Example:
 ~~~
 
 
-
 ~~~lisp
  (with-shell-command (cmd linevar)
     body ...)
@@ -45,8 +44,6 @@ Example:
 ~~~  
 
 
-
-
 ~~~lisp
 (shell->rc cmd)
 ~~~
@@ -64,7 +61,6 @@ Example:
  
  1
 ~~~
-
 
 
 ~~~lisp
@@ -102,9 +98,9 @@ Example:
  T
 ~~~
 
+
 A few anaphoric macros are included to ease the handling of multiple
 value returns (ref. On Lisp, Chapter 14). 
-
 
 ~~~lisp
 (if_ test-form true-form false-form)
@@ -148,6 +144,7 @@ Example:
 
 (":0" "pts/0" "pts/3")
 ~~~
+
 
 ~~~lisp
 (cond_ 

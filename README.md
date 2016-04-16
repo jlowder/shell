@@ -2,7 +2,7 @@
 
 This is a collection of macros and functions that can be used to interface with the shell.
 
-# Usage
+## Usage
 
 ~~~lisp
  (collect-shell (cmd linevar)
@@ -165,3 +165,8 @@ Example:
 
 25
 ~~~
+
+
+## License
+
+MIT

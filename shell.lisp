@@ -81,7 +81,7 @@ a bool indicating whether or not the command was successful."
     (values (string-trim (string #\newline) a) (eq 0 c))))
              
 ;; example:  
-;; (shell-command-string "who")
+;; (shell->string "who")
 ;; 
 ;; "jlowder  :0           2015-12-17 16:02 (:0)
 ;; jlowder  pts/0        2015-12-24 09:43 (:0)"

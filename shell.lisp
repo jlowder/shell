@@ -63,10 +63,10 @@ if the command was successful."
     (declare (ignore a b)) c))
 
 ;; example:
-;; (shell-command-rc "who | grep jlowder")
+;; (shell->rc "who | grep jlowder")
 ;; 
 ;; 0
-;; (shell-command-rc "who | grep fdjkjkfld")
+;; (shell->rc "who | grep fdjkjkfld")
 ;; 
 ;; 1
 

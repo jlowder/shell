@@ -53,11 +53,11 @@ Execute a shell command and return the result.
 Example:
 
 ~~~lisp
- (shell-command-rc "who | grep jlowder")
+ (shell->rc "who | grep jlowder")
  
  0
 
- (shell-command-rc "who | grep fdjkjkfld")
+ (shell->rc "who | grep fdjkjkfld")
  
  1
 ~~~
@@ -73,7 +73,7 @@ indicating whether or not the command was successful.
 Example:
 
 ~~~lisp
- (shell-command-string "who")
+ (shell->string "who")
  
  "jlowder  :0           2015-12-17 16:02 (:0)
  jlowder  pts/0        2015-12-24 09:43 (:0)"
